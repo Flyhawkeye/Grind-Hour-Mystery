@@ -1,0 +1,17 @@
+{
+  "env": {
+    "node": true
+  },
+  "extends": "eslint:recommended",
+  "plugins": {
+    "jsdoc": true
+  },
+  "rules": {
+    "no-console": 0,
+    "no-unused-vars": 2,
+    "jsdoc/check-indentation": 2,
+    "jsdoc/check-param-names": 2,
+    "jsdoc/check-types": 2,
+    "jsdoc/require-jsdoc": 2
+  }
+}
