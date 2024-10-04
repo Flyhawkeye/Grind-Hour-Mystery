@@ -8,28 +8,34 @@ const client = new Client({
     GatewayIntentBits.DirectMessages,
   ],
 });
+
 const config = require('./config');
 const database = require('./utils/database');
 const api = require('./api');
+const fs = require('fs');
 
 client.commands = new Discord.Collection();
 
-fs.readdirSync('./commands').forEach(file => {
+fs.readdirSync('./commands').forEach((file) => {
   if (!file.endsWith('.js')) return;
   const command = require(`./commands/${file}`);
   client.commands.set(command.name, command);
 });
 
-client.login(config.botToken);
+client.login(config.botToken).catch((error) => {
+  console.error('Error logging in:', error);
+  process.exit(1);
+});
 
 client.on('ready', () => {
   console.log('Bot is online!');
 });
 
-client.on('messageCreate', message => {
+client.on('messageCreate', (message) => {
   if (!message.content.startsWith(config.prefix)) return;
   const args = message.content.slice(config.prefix.length).trim().split(/ +/);
   const command = args.shift().toLowerCase();
+
   if (!client.commands.has(command)) return;
   try {
     client.commands.get(command).execute(client, message, args, config, database);
